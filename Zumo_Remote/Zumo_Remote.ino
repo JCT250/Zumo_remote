@@ -5,7 +5,7 @@
 SoftwareSerial BT(5, 4); // RX, TX
 
 byte in;
-
+int time = 100;
 ZumoMotors motors;
 
 void setup()  
@@ -33,6 +33,9 @@ void loop() // run over and over
         {
           motors.setLeftSpeed(-400);
           motors.setRightSpeed(400);
+          delay(time);
+          motors.setLeftSpeed(0);
+          motors.setRightSpeed(0);
         }
 
         if(in == 70) //Forward
@@ -45,6 +48,9 @@ void loop() // run over and over
         {
           motors.setLeftSpeed(400);
           motors.setRightSpeed(-400);
+          delay(time);
+          motors.setLeftSpeed(0);
+          motors.setRightSpeed(0);
         }
 
         if(in == 66) //Back
