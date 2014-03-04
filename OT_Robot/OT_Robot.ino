@@ -1,3 +1,6 @@
+// Simple robot to be used for OT purposes. Contains code 
+// from Pololu Buzzer examples (www.pololu.com) 
+
 #include <ZumoBuzzer.h>
 #include <ZumoMotors.h>
 #include <SoftwareSerial.h>
@@ -29,7 +32,7 @@ const char fugue[] PROGMEM =
 void setup()
 {
   Serial.begin(9600);
-  Serial.println("Goodnight moon!");
+  Serial.println("Entering Loop");
   BT.begin(9600);
 }
 
