@@ -80,21 +80,21 @@ void BTProcess()
 {
   process = 0;
 
-  if(data[1] == 70) ydir = 1;
+  if(data[1] == 70) ydir = 1; // determine whether the X and Y values should be negative or positive depenging based on whether the robot has recieved a F or B / L or R
   if(data[1] == 66) ydir = 0;
   if(data[6] == 76) xdir = 1; //left
   if(data[6] == 82) xdir = 0; //right
 
-  yval = ((data[2]-48)*100)+((data[3]-48)*10)+(data[4]-48);
+  yval = ((data[2]-48)*100)+((data[3]-48)*10)+(data[4]-48); // add the seperate values for 1's 10's and 100's together to get one int that represents the recieved number
   xval = ((data[7]-48)*100)+((data[8]-48)*10)+(data[9]-48);
   
   yval = yval - 5; //sets size of deadzone
   xval = xval - 5;
   
-  if(yval<0) yval = 0; // removes negative numbers
+  if(yval<0) yval = 0; // removes negative numbers created by deadzone
   if(xval<0) xval = 0;
 
-  if(yval>50) yval=50;
+  if(yval>50) yval=50; //if the number is larger than 50 degrees then make it 50 - this is to set a max value
   if(xval>50) xval=50;
   
   Serial.print("Y Dir ");
@@ -105,7 +105,7 @@ void BTProcess()
   Serial.println(yval);
   Serial.println(xval);
 
-  yvalmapped = map(yval, 0, 50, 0, 400);
+  yvalmapped = map(yval, 0, 50, 0, 400); //map the recieved values in degrees to the PWM range supported by the motors ie 0 to 50 degrees to 0 to 400 as per the motor driver specs
   xvalmapped = map(xval, 0, 50, 0, 400);
 
   if(ydir==1) //if going forward
@@ -118,7 +118,7 @@ void BTProcess()
 
   if(ydir==0) //if going backwards
   {
-    yvalmapped = map(yvalmapped, 0, 400, 0, -400);
+    yvalmapped = map(yvalmapped, 0, 400, 0, -400); // remap the PWM value for reverse travel
     
     leftspeed = (yvalmapped); //set both motors to go backward
     rightspeed = (yvalmapped);
@@ -132,7 +132,7 @@ void BTProcess()
     {
       if(xdir==1)
       {
-        leftspeed = (0-xvalmapped);
+        leftspeed = (0-xvalmapped);// then take the x value and turn the left and right sides in opposite directions by that ammount
         rightspeed = xvalmapped;
       }
       if(xdir==0)
@@ -144,7 +144,7 @@ void BTProcess()
   }
         
   
-  // the next sections prevents values larger than allowed being sent to one motor. as soon as it overruns it slows or reverses the other motor
+  // the next sections prevents values larger than allowed being sent to one motor. as soon as it overruns it slows or reverses the other motor by the overrun ammount
   
   if(leftspeed<-400) 
   {
