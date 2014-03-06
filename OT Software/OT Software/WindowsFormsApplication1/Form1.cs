@@ -23,9 +23,7 @@ namespace WindowsFormsApplication1
             var ports = SerialPort.GetPortNames();
             comboBox1.DataSource = ports;
             this.KeyPreview = true;
-        }
-
-        
+        }  
 
         private void Connect(string portName)
         {
@@ -34,8 +32,12 @@ namespace WindowsFormsApplication1
             {
                 serialPort1.BaudRate = 9600;
                 serialPort1.Open();
-                btn_serial_connect.Enabled = false;
-                lbl_serial.Text = (String.Format("Connected to '{0}'", comboBox1.SelectedItem));
+                btn_serial_connect.Visible = false;
+                btn_serial_refresh.Visible = false;
+                comboBox1.Visible = false;
+                btn_click.Location = new Point (16,16);
+                btn_click.Size = new Size(256,238);
+                Form1.ActiveForm.Text = (String.Format("Connected to '{0}'", comboBox1.SelectedItem)); 
             }
         } //done  
 
@@ -48,7 +50,6 @@ namespace WindowsFormsApplication1
         {
             if (comboBox1.SelectedIndex > -1)
             {
-                // MessageBox.Show(String.Format("Connecting to '{0}'", comboBox1.SelectedItem));
                 Connect(comboBox1.SelectedItem.ToString());
             }
             else
@@ -57,25 +58,11 @@ namespace WindowsFormsApplication1
             }
         } //done
 
-        private void btn_serial_disconnect_Click(object sender, EventArgs e)
-        {
-            if (serialPort1.IsOpen)
-            {
-                serialPort1.Close();
-                lbl_serial.Text = ("Serial Connection Closed");
-                // MessageBox.Show("Serial connection closed");
-                btn_serial_connect.Enabled = true;
-            }
-            else if (!serialPort1.IsOpen)
-            {
-                MessageBox.Show("No connection currently open", "Alert");
-            }
-        } //done
-
         private void btn_serial_refresh_Click(object sender, EventArgs e)
         {
             var ports = SerialPort.GetPortNames();
             comboBox1.DataSource = ports;
+
         }
 
         private void btn_click_MouseDown(object sender, MouseEventArgs e)
@@ -132,6 +119,11 @@ namespace WindowsFormsApplication1
                 Byte[] up = { 0x55 };
                 serialPort1.Write(up, 0, 1);
             }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
